@@ -1,0 +1,1778 @@
+/* ============================================================================
+   GLOBAL DESIGN SYSTEM - LIS Application
+   Consistent UI/UX across all pages with responsive design
+   ============================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap");
+
+/* ============================================================================
+   1. CSS CUSTOM PROPERTIES (Variables)
+   ============================================================================ */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #0666d4;
+  --color-primary-dark: #0652a8; /* Corrected to a darker shade */
+  --color-primary-light: rgba(45, 108, 243, 0.1);
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-dark: #059669; /* Corrected to a darker shade */
+  --color-success-light: rgba(16, 185, 129, 0.1);
+
+  --color-warning: #ff8e53;
+  --color-warning-dark: #ea580c; /* Corrected to a darker shade */
+  --color-warning-light: rgba(255, 142, 83, 0.1);
+
+  --color-danger: #ff6b6b;
+  --color-danger-dark: #dc2626; /* Corrected to a darker shade */
+  --color-danger-light: rgba(255, 107, 107, 0.1);
+
+  --color-secondary: #909399;
+  --color-secondary-light: rgba(96, 98, 102, 0.1);
+
+  --color-info: #0666d4;
+
+  /* Neutral Colors */
+  --color-dark: #0b1b2b;
+  --color-dark-secondary: #1a2d42;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #606266;
+  --color-text-tertiary: #909399;
+  --color-text-disabled: #999999;
+  --color-text-light: #ffffff;
+
+  /* Background Colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f5f7fa;
+  --color-bg-tertiary: #f0f0f0;
+  --color-bg-dark: #0b1b2b;
+
+  /* Border Colors */
+  --color-border-primary: #d9dcde;
+  --color-border-secondary: #e8eef5;
+  --color-border-light: #eeeeee;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+
+  /* Typography */
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-size-xxs: 10px;
+  --font-size-2xs: 10px; /* legacy alias used by some components (== xxs) */
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-md: 13px; /* legacy alias used by some components (was undefined -> fell back to 14px) */
+  --font-size-base: 13px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+
+  /* The app's two everyday type sizes (enforced globally in section 2.1):
+     DEFAULT = 13px for all UI text
+     CONTENT = 12px for content areas, buttons and text */
+  --font-size-default: var(--font-size-base); /* 13px */
+  --font-size-content: var(--font-size-xs); /* 12px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 800;
+
+  --font-family-base-custom: "Montserrat" !important;
+
+  /* Line Heights */
+  --line-height-compact: 1.3;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Border Radius */
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 6px;
+  --border-radius-xl: 8px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+  /* Custom Shadow  for LOGO*/
+  --custom-shadow-lg: 0 0 12px #0891b2;
+  --custom-color-border-primary: #0891b2;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Z-index Scale */
+  --z-dropdown: 1000;
+  --z-modal: 2000;
+  --z-tooltip: 2100;
+  --z-notification: 3000;
+}
+
+/* ============================================================================
+   2. RESET & BASE STYLES
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base); /* 13px app-wide default */
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
+  line-height: var(--line-height-normal);
+}
+
+/* ============================================================================
+   2.1 GLOBAL FONT SIZE DEFAULTS (enforced app-wide)
+   The application uses exactly two everyday sizes:
+     • DEFAULT 13px -> all UI text: headings fallback, labels, table headers,
+                       toolbars, menus, navigation … (--font-size-default)
+     • CONTENT 12px -> content areas, buttons and text: cards, dialogs,
+                       tables, paragraphs, form controls … (--font-size-content)
+   Single source of truth: every page / component inherits these automatically,
+   so individual views should not hardcode font sizes.
+   ============================================================================ */
+
+/* --- Element Plus is imported AFTER this file (see App.vue), so its :root
+   would normally win the cascade. This selector has a higher specificity
+   (html:root) and therefore applies regardless of stylesheet order.
+   It moves the whole Element Plus type scale onto the two app sizes. --- */
+html:root {
+  --el-font-size-base: 13px; /* was 14px -> default tier */
+  --el-font-size-small: 12px; /* was 13px -> content tier */
+  --el-font-size-extra-small: 12px;
+}
+
+/* --- DEFAULT: 13px ------------------------------------------------------
+   Headings fall back to the app default; larger sizes must come from the
+   design tokens (.page-title, .section-title, display values, …) or from an
+   explicit component rule. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-default);
+}
+
+/* Labels and table headers are UI text, not content -> default tier */
+label,
+th,
+.el-dropdown,
+.el-picker-panel__shortcut,
+.el-time-panel__btn {
+  font-size: var(--font-size-default);
+}
+
+/* Element Plus hardcodes these to 14px; plain-global rules need !important
+   because EP loads after this file — same convention as buttons/tags/drawer.
+   All reuse the existing --font-size-default (13px), no new vars. */
+.el-dropdown-menu__item,
+.el-switch__label,
+.el-switch__label *,
+.el-message__content,
+.el-breadcrumb,
+.el-pagination,
+.el-pagination button {
+  font-size: var(--font-size-default) !important;
+}
+
+/* --- CONTENT, BUTTONS & TEXT: 12px --------------------------------------
+   Content containers: unstyled content inside these areas inherits 12px.
+   Elements that define their own size (titles, values, icons, badges …)
+   are unaffected — an element's own rule always beats inheritance. */
+.page-content,
+.card,
+.card-body,
+.modal-body,
+.alert,
+.table-wrapper,
+.table,
+.table-section,
+.stat-card,
+.metric-card,
+.category-card,
+.el-card,
+.el-dialog,
+.el-dialog__body,
+.el-drawer,
+.el-drawer__body,
+.el-table,
+.el-form-item__content,
+p {
+  font-size: var(--font-size-content);
+}
+
+/* Table cells are content */
+td {
+  font-size: var(--font-size-content);
+}
+
+/* Buttons and form controls stay at 12px with !important so they remain
+   consistent even against Element Plus / component styles that load after
+   this file. Native elements (input/select/textarea) cover plain controls;
+   the .el-* inner elements cover Element Plus controls rendered on top
+   (dropdown options, date cells, memo/textarea text, checkbox/radio labels,
+   select selections, switch text, tabs, menu items, table filter items …).
+   All reuse the existing --font-size-content var (12px) — no duplicates. */
+button,
+.btn,
+.el-button,
+input,
+select,
+textarea,
+.el-input__inner,
+.el-textarea__inner,
+.el-select__placeholder,
+.el-select__input,
+.el-select-dropdown__item,
+.el-checkbox__label,
+.el-radio__label,
+.el-switch__label,
+.el-tabs__item,
+.el-menu-item,
+.el-table-filter__list-item,
+.el-cascader-node__label,
+.el-tree-node__label {
+  font-size: var(--font-size-content) !important;
+}
+
+/* ============================================================================
+   3. RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+  :root {
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --font-size-base: 13px;
+    --font-size-lg: 15px;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+}
+
+/* Extra large devices (large desktops, 1440px and up) */
+@media (min-width: 1440px) {
+}
+
+/* ============================================================================
+   4. PAGE & CONTAINER LAYOUTS
+   ============================================================================ */
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-secondary);
+}
+
+.page-header {
+  /* Style for the main page title if outside the container */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding: 0;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: var(--spacing-lg) var(--spacing-lg);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.page-title {
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+}
+
+.header-title-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.content-wrapper {
+  display: flex;
+  height: calc(100vh - 80px); /* Adjust for header/footer if any */
+  gap: var(--spacing-lg);
+  overflow: hidden; /* Prevent scrolling on the main container */
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden; /* Enable vertical scrolling if content exceeds height */
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: var(--spacing-lg);
+  }
+}
+
+.page-footer {
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background-color: var(--color-bg-primary);
+  border-top: 1px solid var(--color-border-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .page-footer {
+    padding: var(--spacing-lg);
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+/* ============================================================================
+   5. CARDS & PANELS
+   ============================================================================ */
+
+.card {
+  background-color: red;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+  width: 100%;
+}
+
+/* Element Plus Card Overrides */
+.el-card__header {
+  border-bottom: 1px solid var(--color-border-primary) !important;
+  padding: 15px 20px !important;
+  font-weight: bold !important;
+  color: var(--color-text-primary) !important;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: var(--font-size-sm);
+}
+
+.card-row:last-child {
+  border-bottom: none;
+}
+
+.card-row-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  min-width: 150px;
+}
+
+.card-row-value {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Element Plus component styles */
+.el-card {
+  width: 100% !important;
+}
+
+.el-table {
+  width: 100% !important;
+}
+
+.el-card__body {
+  width: 100% !important;
+  padding: 20px !important;
+}
+
+/* ============================================================================
+   6. FORMS & INPUTS
+   ============================================================================ */
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.form-label.required::after {
+  content: "*";
+  color: var(--color-danger);
+  margin-left: var(--spacing-xs);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  padding: var(--spacing-md) var(--spacing-md);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+  background-color: var(--color-bg-primary);
+}
+
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover {
+  border-color: var(--color-border-secondary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(7, 110, 212, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.form-helper {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--spacing-xs);
+}
+
+.form-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  margin-top: var(--spacing-xs);
+}
+
+/* Form Grid */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-col.full {
+  grid-column: 1 / -1;
+}
+
+/* ============================================================================
+   7. BUTTONS
+   ============================================================================ */
+
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-border-primary);
+  border-color: var(--color-border-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Success Button */
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--color-text-light);
+  border-color: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: var(--color-success-dark);
+  border-color: var(--color-success-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Warning Button */
+.btn-warning {
+  background-color: var(--color-warning);
+  color: var(--color-text-light);
+  border-color: var(--color-warning);
+}
+
+.btn-warning:hover:not(:disabled) {
+  background-color: var(--color-warning-dark);
+  border-color: var(--color-warning-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: var(--color-danger);
+  color: var(--color-text-light);
+  border-color: var(--color-danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+  border-color: var(--color-danger-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Button Group */
+.btn-group {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 576px) {
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================================
+   8. TABLES
+   ============================================================================ */
+
+.table-wrapper {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Aggressive overrides for el-table to achieve card-like rows (from OrderManagement) */
+
+.table-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto; /* Allow request-list to take full available width */
+  overflow: hidden; /* Enable scrolling within the panel */
+  min-width: 0; /* Prevent flex overflow */
+}
+
+.custom-table {
+  width: 100%;
+  height: 100%;
+}
+
+.custom-table .el-table {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.custom-table .el-table__body-wrapper {
+  border: none !important;
+}
+
+.custom-table .el-table__body {
+  border: none !important;
+}
+
+.custom-table .el-table__body-wrapper table {
+  border-collapse: separate !important;
+  border-spacing: 0px 4px !important;
+}
+
+.custom-table .el-table__row {
+  display: table-row !important;
+  background-color: var(--color-bg-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer;
+}
+
+.custom-table .el-table__row:hover {
+  background-color: var(--color-primary-light) !important;
+  transform: translateY(-2px) !important;
+}
+
+.custom-table .el-table__row.current-row {
+  background-color: var(--color-primary-light) !important;
+  outline: 2px solid var(--color-primary) !important;
+  transform: translateY(-2px) !important;
+}
+
+.custom-table .el-table__cell {
+  display: table-cell !important;
+  vertical-align: middle !important;
+  padding: 4px 0 !important;
+  border-bottom: none !important;
+}
+
+.custom-table .el-table__header th {
+  background-color: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: 700 !important;
+  padding: 4px !important;
+  border-bottom: 2px solid var(--color-border-primary) !important;
+}
+
+/* Row Styling for Critical */
+.el-table__row.row-critical-hold {
+  background-color: #fff1f0 !important; /* light red */
+  border-left: 4px solid var(--color-danger) !important;
+}
+
+/* General Violation Row Styling */
+.el-table__row.row-has-violation {
+  background-color: #fffbe6 !important; /* light yellow/orange background */
+  position: relative;
+}
+
+.el-table__row.row-has-violation:not(.row-critical-hold) {
+  border-left: 4px solid var(--color-warning) !important;
+}
+
+.el-table__row.row-cds-blocked {
+  border-left: 4px solid #f56c6c !important;
+}
+
+.el-table__row.row-cds-triggered {
+  border-left: 4px solid #e6a23c !important;
+}
+
+.el-table__row.row-critical-hold:hover {
+  background-color: #fff1f0 !important;
+  filter: brightness(0.98);
+}
+
+/* Row Styling for CDS */
+.el-table__row.row-cds-blocked {
+  background-color: #fff1f0 !important;
+  border-left: 4px solid var(--color-danger) !important;
+}
+
+.el-table__row.row-cds-triggered {
+  background-color: #fffbe6 !important; /* light orange/yellow */
+  border-left: 4px solid var(--color-warning) !important;
+}
+
+.el-table__row.row-cds-blocked:hover,
+.el-table__row.row-cds-triggered:hover {
+  filter: brightness(0.98);
+}
+
+/* Table Sections */
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: auto;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 2px solid var(--color-border-primary);
+}
+
+.table thead th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.table tbody td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: var(--font-size-content); /* content: 12px */
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================================================================
+   9. MODALS & DIALOGS
+   ============================================================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background: linear-gradient(
+    135deg,
+    var(--color-dark) 0%,
+    var(--color-dark-secondary) 100%
+  );
+  color: var(--color-text-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin: -20px -20px 0 -20px;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.modal-header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+.modal-header-icon {
+  font-size: var(--font-size-xl);
+  opacity: 0.9;
+}
+
+.modal-header-title {
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.modal-header-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-left: auto;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border-secondary);
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .modal-footer {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ============================================================================
+   10. ALERTS & MESSAGES
+   ============================================================================ */
+
+.alert {
+  padding: var(--spacing-lg) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  border-left: 4px solid;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.alert-message {
+  font-size: var(--font-size-content); /* content: 12px */
+  line-height: var(--line-height-normal);
+}
+
+.alert-success {
+  background-color: #f0f9ff;
+  border-color: var(--color-success);
+  color: #0c5c1f;
+}
+
+.alert-warning {
+  background-color: #fffbeb;
+  border-color: var(--color-warning);
+  color: #92400e;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border-color: var(--color-danger);
+  color: #7f1d1d;
+}
+
+.alert-info {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: #0c3d7f;
+}
+
+/* ============================================================================
+   11. BADGES & TAGS
+   ============================================================================ */
+
+.badge,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.badge-primary,
+.tag-primary,
+.badge--primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.badge-success,
+.tag-success,
+.badge--success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge-warning,
+.tag-warning,
+.badge--warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+  border-color: rgba(255, 142, 83, 0.2);
+}
+
+.badge-danger,
+.tag-danger,
+.badge--danger {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.badge-info,
+.tag-info,
+.badge--info {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+/* Solid variants for tags if needed */
+.tag-solid {
+  color: var(--color-text-light) !important;
+}
+
+.tag-solid.tag-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.tag-solid.tag-success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+.tag-solid.tag-warning {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+.tag-solid.tag-danger {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* ============================================================================
+   12. UTILITY CLASSES
+   ============================================================================ */
+
+/* Spacing Utilities */
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-xs {
+  margin-bottom: var(--spacing-xs);
+}
+.mb-sm {
+  margin-bottom: var(--spacing-sm);
+}
+.mb-md {
+  margin-bottom: var(--spacing-md);
+}
+.mb-lg {
+  margin-bottom: var(--spacing-lg);
+}
+.mb-xl {
+  margin-bottom: var(--spacing-xl);
+}
+.mb-2xl {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+.mt-xs {
+  margin-top: var(--spacing-xs);
+}
+.mt-sm {
+  margin-top: var(--spacing-sm);
+}
+.mt-md {
+  margin-top: var(--spacing-md);
+}
+.mt-lg {
+  margin-top: var(--spacing-lg);
+}
+.mt-xl {
+  margin-top: var(--spacing-xl);
+}
+.mt-2xl {
+  margin-top: var(--spacing-2xl);
+}
+
+.p-0 {
+  padding: 0;
+}
+.p-xs {
+  padding: var(--spacing-xs);
+}
+.p-sm {
+  padding: var(--spacing-sm);
+}
+.p-md {
+  padding: var(--spacing-md);
+}
+.p-lg {
+  padding: var(--spacing-lg);
+}
+.p-xl {
+  padding: var(--spacing-xl);
+}
+.p-2xl {
+  padding: var(--spacing-2xl);
+}
+
+/* Text Utilities */
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+.text-disabled {
+  color: var(--color-text-disabled);
+}
+.text-light {
+  color: var(--color-text-light);
+}
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+.text-base {
+  font-size: var(--font-size-base);
+}
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+.text-xl {
+  font-size: var(--font-size-xl);
+}
+
+.font-normal {
+  font-weight: var(--font-weight-normal);
+}
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Display Utilities */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.gap-xs {
+  gap: var(--spacing-xs);
+}
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+.gap-md {
+  gap: var(--spacing-md);
+}
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.grid {
+  display: grid;
+}
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+
+/* Background Utilities */
+.bg-primary {
+  background-color: var(--color-bg-primary);
+}
+.bg-secondary {
+  background-color: var(--color-bg-secondary);
+}
+.bg-tertiary {
+  background-color: var(--color-bg-tertiary);
+}
+.bg-dark {
+  background-color: var(--color-bg-dark);
+}
+
+/* Border Utilities */
+.border {
+  border: 1px solid var(--color-border-primary);
+}
+.border-top {
+  border-top: 1px solid var(--color-border-primary);
+}
+.border-bottom {
+  border-bottom: 1px solid var(--color-border-primary);
+}
+.border-left {
+  border-left: 1px solid var(--color-border-primary);
+}
+.border-right {
+  border-right: 1px solid var(--color-border-primary);
+}
+
+.rounded {
+  border-radius: var(--border-radius-lg);
+}
+.rounded-md {
+  border-radius: var(--border-radius-md);
+}
+.rounded-lg {
+  border-radius: var(--border-radius-lg);
+}
+.rounded-xl {
+  border-radius: var(--border-radius-xl);
+}
+
+/* Shadow Utilities */
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+/* ============================================================================
+   13. ELEMENT PLUS OVERRIDES
+   ============================================================================ */
+
+/* Element Plus Tag Overrides (content tier: 12px, was 10px/xxs) */
+.el-tag {
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-content) !important;
+}
+
+.el-tag--primary {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
+  border-color: rgba(6, 182, 212, 0.2) !important;
+}
+
+.el-tag--success {
+  background-color: var(--color-success-light) !important;
+  color: var(--color-success) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+.el-tag--warning {
+  background-color: var(--color-warning-light) !important;
+  color: var(--color-warning) !important;
+  border-color: rgba(255, 142, 83, 0.2) !important;
+}
+
+.el-tag--danger {
+  background-color: var(--color-danger-light) !important;
+  color: var(--color-danger) !important;
+  border-color: rgba(255, 107, 107, 0.2) !important;
+}
+
+.el-tag--info {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
+  border-color: rgba(6, 182, 212, 0.2) !important;
+}
+
+.el-tag--default {
+  background-color: var(--color-secondary-light) !important;
+  color: var(--color-secondary) !important;
+  border-color: rgba(6, 182, 212, 0.2) !important;
+}
+
+/* Element Plus Badge Overrides */
+.el-badge__content {
+  border: none !important;
+  font-size: var(--font-size-xxs) !important;
+}
+
+.el-badge__content--primary {
+  background-color: var(--color-primary) !important;
+}
+.el-badge__content--success {
+  background-color: var(--color-success) !important;
+}
+.el-badge__content--warning {
+  background-color: var(--color-warning) !important;
+}
+.el-badge__content--danger {
+  background-color: var(--color-danger) !important;
+}
+.el-badge__content--info {
+  background-color: var(--color-primary) !important;
+}
+.el-badge__content--secondary {
+  background-color: var(--color-secondary) !important;
+}
+.el-badge__content--white {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* Element Plus Button Overrides */
+.el-button--primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #fff !important;
+}
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background-color: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: #fff !important;
+}
+
+.el-button--success {
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+  color: #fff !important;
+}
+.el-button--success:hover,
+.el-button--success:focus {
+  background-color: var(--color-success-dark) !important;
+  border-color: var(--color-success-dark) !important;
+  color: #fff !important;
+}
+
+.el-button--warning {
+  background-color: var(--color-warning) !important;
+  border-color: var(--color-warning) !important;
+  color: #fff !important;
+}
+.el-button--warning:hover,
+.el-button--warning:focus {
+  background-color: var(--color-warning-dark) !important;
+  border-color: var(--color-warning-dark) !important;
+  color: #fff !important;
+}
+
+.el-button--danger {
+  background-color: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
+  color: #fff !important;
+}
+.el-button--danger:hover,
+.el-button--danger:focus {
+  background-color: var(--color-danger-dark) !important;
+  border-color: var(--color-danger-dark) !important;
+  color: #fff !important;
+}
+
+.el-button--info {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-border-primary) !important;
+  color: var(--color-text-primary) !important;
+}
+.el-button--info:hover,
+.el-button--info:focus {
+  background-color: var(--color-border-primary) !important;
+  border-color: var(--color-border-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Override Element Plus form styles */
+.el-form-item__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.el-input__wrapper,
+.el-select,
+.el-date-editor {
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+}
+
+.el-input__wrapper:hover,
+.el-select:hover,
+.el-date-editor:hover {
+  border-color: var(--color-border-secondary);
+}
+
+.el-input__wrapper:focus-within,
+.el-select:focus-within,
+.el-date-editor:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(7, 110, 212, 0.1);
+}
+
+.el-button--primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.el-button--primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.el-button--success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.el-button--warning {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.el-button--danger {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.el-dialog__body {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-content); /* content: 12px */
+}
+
+/* Custom Card Patterns */
+.metric-card,
+.stat-card,
+.category-card {
+  border-radius: 8px !important;
+  border: 1px solid var(--color-border-light) !important;
+  background: white !important;
+  transition: all 0.3s ease !important;
+}
+
+.metric-card:hover,
+.stat-card:hover,
+.category-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+  border-color: var(--color-primary-light) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* ============================================================================
+   15. PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   16. el-pagination Overrides
+   ============================================================================ */
+
+.pagination {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: self-end;
+
+  /* Container Polish */
+  background-color: var(--color-bg-secondary);
+  padding: 5px 18px;
+  height: 35px;
+  z-index: 0;
+
+  /* Typography & Layout Spacing */
+  color: #64748b; /* Clean slate grey for helper text */
+  gap: 20px; /* Space out the total, page size selector, and page numbers */
+
+  margin-left: calc(var(--spacing-lg) * -1) !important;
+  margin-right: calc(var(--spacing-lg) * -1) !important;
+  margin-bottom: calc(var(--spacing-lg) * -1) !important;
+}
+
+/* ============================================================================
+   17. el-drawer overrides
+   NOTE: Element Plus CSS is imported AFTER this file (see App.vue @import),
+   so any declaration EP also sets on the same element must use !important
+   to win the cascade (same convention as sections 14/16, buttons, tags …).
+   In <style scoped> this used to win via the [data-v-xxx] attribute
+   specificity; as global rules it needs !important instead.
+   ============================================================================ */
+/* Compact Drawer Header - native el-drawer header */
+.el-drawer {
+  background: var(--color-bg-secondary) !important;
+}
+
+.el-drawer__header {
+  padding: 12px 20px !important;
+  border-bottom: 1px solid var(--color-border-secondary) !important;
+  background-color: var(--color-bg-secondary) !important;
+  min-height: 48px !important;
+  margin-bottom: 0 !important;
+}
+
+.el-drawer__title {
+  font-size: var(--font-size-default) !important; /* default tier: 13px */
+  font-weight: 600 !important;
+  color: var(--color-text-primary) !important;
+  text-align: left !important;
+}
+
+.el-drawer__close-btn {
+  font-size: 1.1rem !important;
+  padding: 4px !important;
+  color: var(--color-danger) !important;
+  background: var(--color-bg-secondary) !important;
+  transition: all 0.2s;
+}
+
+.el-drawer__close-btn:hover {
+  background: var(--color-danger-light) !important;
+  color: var(--color-danger) !important;
+  transform: rotate(90deg);
+}
+
+/* Footer styles */
+.drawer-footer {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: var(--spacing-md) var(--spacing-md) !important;
+  border-top: 1px solid var(--color-border-primary) !important;
+  background: var(--color-bg-secondary) !important;
+
+  margin-left: calc(var(--spacing-lg) * -1) !important;
+  margin-right: calc(var(--spacing-lg) * -1) !important;
+  margin-bottom: calc(var(--spacing-lg) * -1) !important;
+}
+
+.drawer-footer .reject-section {
+  display: flex !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+}
+
+.drawer-footer .accept-section {
+  display: flex !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+}
+
+.drawer-footer .reject-section .reject-btn {
+  color: #dc2626 !important;
+  background: transparent !important;
+  border: 1px solid #fca5a5 !important;
+}
+
+/* ===================== Request Details Drawer ===================== */
+
+/* Drawer Patient Header */
+.patient-header {
+  padding: var(--spacing-md) !important;
+  border: 1px solid var(--color-border-secondary) !important;
+  background-color: var(--color-bg-primary) !important;
+  border-radius: 4px !important;
+  margin-bottom: var(--spacing-lg) !important;
+}
+
+.drawer-patient-name {
+  font-size: var(--font-size-default) !important;
+  font-weight: 600 !important;
+  color: var(--color-text-primary) !important;
+  margin: 0 !important;
+}
+
+/* Drawer Information Cards */
+.info-card {
+  background-color: var(--color-bg-primary) !important;
+  border: 1px solid var(--color-border-secondary) !important;
+  border-radius: var(--border-radius-md) !important;
+  padding: var(--spacing-sm) !important;
+  margin-bottom: var(--spacing-sm) !important;
+}
+
+.card-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-bottom: var(--spacing-sm) !important;
+  margin-bottom: var(--spacing-md) !important;
+  border-bottom: 1px solid var(--color-border-secondary) !important;
+  font-size: var(--font-size-default) !important;
+}
+
+.card-header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--spacing-sm) !important;
+}
+
+.card-icon {
+  color: var(--color-primary) !important;
+}
+
+.card-title {
+  font-size: var(--font-size-default) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.card-count {
+  color: var(--color-text-secondary) !important;
+}
+
+.card-body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.request-meta-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+  gap: var(--spacing-sm) !important;
+}
+
+.meta-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.field-label {
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
+  color: var(--color-text-tertiary) !important;
+}
+
+.field-value {
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Grouped Tests inside the drawer */
+.status-detail-text {
+  color: var(--color-text-secondary) !important;
+}
+
+.empty-state {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: var(--spacing-xl) 0 !important;
+  color: var(--color-text-tertiary) !important;
+  text-align: center !important;
+}
+
+.empty-state p {
+  margin: var(--spacing-sm) 0 0 0 !important;
+  font-size: var(--font-size-xs) !important;
+}
+
+.patient-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.meta-item {
+  white-space: nowrap;
+}
+
+.meta-sep {
+  color: var(--color-border-secondary);
+  font-weight: 600;
+}
+
+.date-text {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", monospace;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
